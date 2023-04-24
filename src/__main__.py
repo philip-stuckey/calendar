@@ -47,11 +47,16 @@ class App:
         today = datetime.date.today() if today is None else datetime.date.fromisoformat(today)
         start_of_week = today - datetime.timedelta(days=today.weekday())
         end_of_week = start_of_week + datetime.timedelta(days=7)
+        w = max(map(len, calendar.day_name))
         with open(self.path, 'r') as file:
             for line in file:
                 event = Event.from_line(line)
                 if start_of_week <= event.date <= end_of_week:
-                    print(calendar.day_name[event.date.weekday()], event._time_str(), event.description)
+                    print(
+                            calendar.day_name[event.date.weekday()].ljust(w), 
+                            event._time_str(), 
+                            event.description
+                    )
 
     def day(self, date=datetime.date.today()):
         AppCalendar.from_file(self.path).print_day_calendar(date)
