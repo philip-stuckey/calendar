@@ -54,7 +54,7 @@ class App:
                 if start_of_week <= event.date <= end_of_week:
                     print(
                             calendar.day_name[event.date.weekday()].ljust(w), 
-                            event._time_str(), 
+                            event.time.isoformat() if event.time is not None else ' '*8, 
                             event.description
                     )
 
