@@ -1,8 +1,9 @@
 import calendar
-from datetime import date
+from datetime import date, time, timedelta
 from dataclasses import dataclass
 from grammar import date_fmt, time_fmt
-
+from more_itertools import pairwise
+from math import floor
 @dataclass
 class AppCalendar:
     events: list[date]
@@ -27,6 +28,35 @@ class AppCalendar:
 
     def print_month_calendar(self, year, month):
         print(self.format_month(year,month))
+
+    @staticmethod
+    def _time_range(start=time.min, stop=time.max, step=timedelta(minutes=30)):
+        t = datetime.combine(datetime.today(), start)
+        end = datetime.combine(datetime.today(), stop)
+        while t < end:
+            yield t
+            t += step
+
+
+    def format_events(events):
+        count = len(events)
+        total_space = len(day_name)
+        space = total_space/count
+        return '/'.join(event.description[0:space].center(space) for event in events)
+
+    def format_day(self, day: date, time_range):
+        day_name = calendar.day_name[date.weekday()]
+        yield day_name
+
+        events = [event for event in self.events if event.date == day and event.time is not None]
+        for start,end in pairwise(time_range):
+            hour_events = [event for event in events if start <= event.time < end]
+            event_count = len(hour_events)
+            if event_count == 0:
+                yield ''
+            else:
+                yield self.format_events(hour_events)
+
 
     def format_month(self, year, month):
         return self.format_header(year, month) + '\n' +\
