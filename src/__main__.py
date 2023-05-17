@@ -70,7 +70,7 @@ class App:
         with open(self.path, 'a') as cal_file:
             print(
                     date.isoformat()+('' if time is None else (' ' + time.isoformat())),
-                    description,
+                    description.strip(),
                     sep='\t', 
                     file=cal_file
             )
