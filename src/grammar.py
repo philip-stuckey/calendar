@@ -3,17 +3,19 @@ import datetime
 
 dash = string('-')
 
+digits2 = regex('\d\d').map(int)
+
 date_fmt=seq(
         year=regex('\d{4}').map(int),
-        month=(dash>>regex('\d\d')).map(int),
-        day=(dash>>regex('\d\d')).map(int)
+        month=dash>>digits2,
+        day=dash>>digits2
 ).combine_dict(datetime.date)
 
 colon = string(':')
 time_fmt=seq(
-        hour=regex('\d\d').map(int),
-        minute=(colon>>regex('\d\d')).map(int),
-        second=(colon>>regex('\d\d')).map(int).optional(0)
+        hour=digits2
+        minute=colon>>digits2,
+        second=(colon>>digits2).optional(0)
 ).combine_dict(datetime.time)
 
 timesep = string(' ')
