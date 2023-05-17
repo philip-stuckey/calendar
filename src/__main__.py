@@ -66,8 +66,7 @@ class App:
         add a new event to the calendar file
         '''
         date = date_fmt.parse(date)
-        (time, _) = time_fmt.optional().parse_partial(tokens[0])
-        description = ' '.join(tokens[(0 if time is None else 1):])
+        (time, description) = time_fmt.optional().parse_partial(' '.join(tokens))
         with open(self.path, 'a') as cal_file:
             print(
                     date.isoformat()+('' if time is None else (' ' + time.isoformat())),
