@@ -29,7 +29,7 @@ class Event:
 
 
 class App:
-    path=Path("~/calendar").expanduser()
+    path=Path("~/Calendar/calendar").expanduser()
 
     def year(self, year=datetime.date.today().year):
         '''
