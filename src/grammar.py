@@ -13,7 +13,7 @@ date_fmt=seq(
 
 colon = string(':')
 time_fmt=seq(
-        hour=digits2
+        hour=digits2,
         minute=colon>>digits2,
         second=(colon>>digits2).optional(0)
 ).combine_dict(datetime.time)
