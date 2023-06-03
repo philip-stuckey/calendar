@@ -1,5 +1,4 @@
 from grammar import line_format, date_fmt, time_fmt
-from calendar_printing import AppCalendar
 from calendar_grids import MonthGrid, YearGrid
 
 from operator import attrgetter
