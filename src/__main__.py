@@ -2,7 +2,6 @@ from grammar import line_format, date_fmt, time_fmt
 from calendar_grids import MonthGrid, YearGrid
 
 from operator import attrgetter
-from pathlib import Path
 
 import calendar
 from datetime import date as _date
