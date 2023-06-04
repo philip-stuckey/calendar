@@ -37,9 +37,8 @@ class App:
         '''
         show the monthly calendar, today is highlighted green, each day with an event is highlighted orange
         '''
-        event_dates = list(map(attrgetter('date'), self._database.month(year,
-            month)))
-        print(MonthGrid(year, month, events=event_dates, color=self.color))
+        event_dates = map(attrgetter('date'), self._database.month(year, month))
+        print(MonthGrid(year, month, events=list(event_dates), color=self.color))
 
     def week(self, today=None):
         today = _date.today() if today is None else _date.fromisoformat(today)
