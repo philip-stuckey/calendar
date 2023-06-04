@@ -10,9 +10,21 @@ from database import DataBase, weekof
 
 class App:
 
+    @property
+    def cal_path(self):
+        return self._cal_path
+
+    @cal_path.setter
+    def cal_path(self, path):
+        self._cal_path = path
+        self._database.load(path)
+
     def __init__(self, cal_path="~/Calendar/calendar", color=True):
-        self._database = DataBase(Path(cal_path).expanduser())
+        self._database = DataBase()
+        self._database.load(cal_path)
+        self._cal_path = cal_path
         self.color=color
+
 
     def year(self, year=_date.today().year):
         '''
