@@ -7,7 +7,7 @@ from pathlib import Path
 import calendar
 from datetime import date as _date
 
-from database import DataBase
+from database import DataBase, weekof
 
 class App:
 
@@ -33,6 +33,9 @@ class App:
     def week(self, today=None):
         today = _date.today() if today is None else _date.fromisoformat(today)
         w = max(map(len, calendar.day_name))
+        (sow, eow) = weekof(today)
+
+        print(f"{sow.isoformat()}/{eow.isoformat()}".center(21))
         for event in self._database.weekof(today):
             print(
                 calendar.day_name[event.date.weekday()].ljust(w), 

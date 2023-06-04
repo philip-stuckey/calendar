@@ -4,6 +4,11 @@ from datetime import date, timedelta
 import calendar
 from events import Event
 
+def weekof(date: date):
+    start_of_week = date - timedelta(days=date.weekday())
+    end_of_week = start_of_week + timedelta(days=7)
+    return (start_of_week, end_of_week)
+
 @dataclass
 class DataBase:
     calendar: Path = Path('~/Calendar/calendar').expanduser()
@@ -26,8 +31,7 @@ class DataBase:
         return self.list(start_of_month, end_of_month)
 
     def weekof(self, date):
-        start_of_week = date - timedelta(days=date.weekday())
-        end_of_week = start_of_week + timedelta(days=7)
+        start_of_week, end_of_week  = weekof(date)
         return self.list(start_of_week, end_of_week)
     
     def day(self, date):
