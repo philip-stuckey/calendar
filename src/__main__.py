@@ -76,12 +76,14 @@ class App:
         print(date.isoformat())
         for event in self._database.day(date):
             print(event._time_str(), event.description)
-
-    def list(self):
+    
+    def list(self, start, end):
         '''
         list upcoming events in chronological order
         '''
-        for event in self._database.list():
+        start = _date.fromisoformat(start)
+        end = _date.fromisoformat(end)
+        for event in self._database.list(start,end):
             print(event)
 
 if __name__ == '__main__':

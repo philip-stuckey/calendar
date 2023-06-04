@@ -1,25 +1,47 @@
-from dataclasses import dataclass
+import calendar
 from pathlib import Path
 from datetime import date, timedelta
-import calendar
+from itertools import chain
+from operator import attrgetter
+
+from grammar import event_format, line_format
 from events import Event
+from recurrance import RecurringEvents
 
 def weekof(date: date):
     start_of_week = date - timedelta(days=date.weekday())
     end_of_week = start_of_week + timedelta(days=7)
     return (start_of_week, end_of_week)
 
-@dataclass
 class DataBase:
-    calendar: Path = Path('~/Calendar/calendar').expanduser()
     
-    def events(self):
-        with open(self.calendar, 'r') as file:
-            return map(Event.from_line, sorted(file))
+    def load(self, calendar_path):
+        path = Path(calendar_path).expanduser()
+        self.events=[]
+        self.recurrances=[]
+        with open(path, 'r') as file:
+            for line in sorted(file):
+                match line_format.parse(line):
+                    case e if isinstance(e,Event):
+                        self.events.append(e)
+                    case r if isinstance(r, RecurringEvents):
+                        self.recurrances.append(e)
+                    case _ :
+                        raise ValueError("unknown object type in file")
+
 
     def list(self, start: date = date.today(), end: date = date.max):
         occuresin = lambda event: event.date >= start and event.date <=end
-        return filter(occuresin, self.events())
+        return filter(
+                occuresin, 
+                chain(
+                    self.events, 
+                    *(rec.list(end) for rec in self.recurrances)
+                )
+            ) 
+    
+    def list_dates(self,start,end):
+        return map(attrgetter('date'), self.list(start, end))
 
     def year(self, year: int):
         return self.list(date(year,1,1), date(year, 12, 31))
