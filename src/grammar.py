@@ -42,7 +42,7 @@ recurrance_format = seq(
         start_date=date_fmt,
         time=(timesep>>time_fmt).optional(),
         period=timesep>>period,
-        end_date=date_fmt.optional(default=datetime.date.max),
+        end_date=(timesep>>date_fmt).optional(default=datetime.date.max),
         description=fieldsep>>description
 ).combine_dict(recurrance.RecurringEvents)
 
