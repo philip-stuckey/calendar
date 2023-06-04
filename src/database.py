@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from pathlib import Path
-from datetime import date, datetime
+from datetime import date, timedelta
 import calendar
 from events import Event
 
