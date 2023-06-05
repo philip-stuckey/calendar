@@ -1,5 +1,6 @@
 from grammar import line_format, date_fmt, time_fmt
 from calendar_grids import MonthGrid, YearGrid
+from events import Event
 
 from operator import attrgetter
 
@@ -59,13 +60,7 @@ class App:
         '''
         date = date_fmt.parse(date)
         (time, description) = time_fmt.optional().parse_partial(' '.join(tokens))
-        with open(self.path, 'a') as cal_file:
-            print(
-                    _date.isoformat()+('' if time is None else (' ' + time.isoformat())),
-                    description.strip(),
-                    sep='\t', 
-                    file=cal_file
-            )
+        self._database.add(Event(date, time, description))
 
     def today(self):
         return self.day()

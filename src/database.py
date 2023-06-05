@@ -16,10 +16,10 @@ def weekof(date: date):
 class DataBase:
     
     def load(self, calendar_path):
-        path = Path(calendar_path).expanduser()
+        self.path = Path(calendar_path).expanduser()
         self.events=[]
         self.recurrances=[]
-        with open(path, 'r') as file:
+        with open(self.path, 'r') as file:
             for line in sorted(file):
                 match line_format.parse(line):
                     case e if isinstance(e,Event):
@@ -29,6 +29,9 @@ class DataBase:
                     case _ :
                         raise ValueError("unknown object type in file")
 
+    def add(self, event: Event):
+        with open(self.path, 'a') as cal_file:
+            print(event, file=cal_file)
 
     def list(self, start: date = date.today(), end: date = date.max):
         occuresin = lambda event: event.date >= start and event.date <=end

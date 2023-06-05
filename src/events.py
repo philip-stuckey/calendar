@@ -13,4 +13,3 @@ class Event:
     def __str__(self):
         return f'{self.date.isoformat()}{self._time_str()}\t{self.description}'
 
-
