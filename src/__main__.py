@@ -43,14 +43,14 @@ class App:
 
     def week(self, today=None):
         today = _date.today() if today is None else _date.fromisoformat(today)
-        w = max(map(len, calendar.day_name))
+        w = 3
         (sow, eow) = weekof(today)
 
         print(f"{sow.isoformat()}/{eow.isoformat()}".center(21))
         for event in self._database.weekof(today):
             print(
-                calendar.day_name[event.date.weekday()].ljust(w), 
-                event.time.isoformat() if event.time is not None else ' '*8, 
+                calendar.day_name[event.date.weekday()][:w].ljust(w), 
+                event.time.strftime('%H:%M') if event.time is not None else ' '*5,
                 event.description
             )
 
