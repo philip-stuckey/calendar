@@ -4,6 +4,7 @@ import calendar
 
 ANSI_GREEN = "\033[42m"  # Highlight today's date in green
 ANSI_YELLOW = "\033[43m"  # Highlight other dates in yellow
+ANSI_RED = "\033[41M"
 ANSI_RESET = "\033[0m"  # Reset text color
 
 def hilight(string, color):
@@ -37,7 +38,9 @@ class MonthGrid:
         if not self.color:
             return ''
 
-        if day == self.today:
+        if day == self.today and day in self.important_days():
+            return ANSI_RED
+        elif day == self.today:
             return ANSI_GREEN
         elif day in self.important_days():
             return ANSI_YELLOW
