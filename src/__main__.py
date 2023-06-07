@@ -5,9 +5,14 @@ from events import Event
 from operator import attrgetter
 
 import calendar
-from datetime import date as _date
+from datetime import date as _date, timedelta
 
 from database import DataBase, weekof
+
+def daterange(start: _date, end: _date, delta=timedelta(days=1)):
+    while start < end:
+        yield start
+        start += delta
 
 class App:
 
@@ -71,6 +76,20 @@ class App:
         for event in self._database.day(date):
             print(event._time_str(), event.description)
     
+    def agenda(self, start=None, end=None):
+        start = _date.today() if start is None else _date.fromisoformat(start)
+        end = start + timedelta(days=7) if end is None else _date.fromisoformat(end)
+        for date in daterange(start, end):
+            header_fmt = f'%Y-%m-%d %a {"(today)" if date == _date.today() else ""}'
+            print(date.strftime(header_fmt))
+            for event in self._database.day(date):
+                print(
+                    ' '*5,
+                    event.time.strftime('%H:%M') if event.time is not None else ' '*5,
+                    event.description
+                )
+
+
     def list(self, start, end):
         '''
         list upcoming events in chronological order
