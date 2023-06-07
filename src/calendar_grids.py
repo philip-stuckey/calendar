@@ -4,7 +4,7 @@ import calendar
 
 ANSI_GREEN = "\033[42m"  # Highlight today's date in green
 ANSI_YELLOW = "\033[43m"  # Highlight other dates in yellow
-ANSI_RED = "\033[41M"
+ANSI_RED = "\033[41m"
 ANSI_RESET = "\033[0m"  # Reset text color
 
 def hilight(string, color):
