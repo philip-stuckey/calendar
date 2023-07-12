@@ -1,4 +1,4 @@
-from parsy import regex, seq, any_char, string
+from parsy import regex, seq, string
 import datetime
 
 dash = string('-')
@@ -22,7 +22,7 @@ timesep = string(' ')
 fieldsep = string('\t')
 
 import events
-description=any_char.many().concat().map(str.strip)
+description=regex('[^\n]').many().concat().map(str.strip)
 event_format = seq(
         date=date_fmt, 
         time=(timesep>>time_fmt).optional(), 
