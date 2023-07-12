@@ -4,7 +4,7 @@ from datetime import date, timedelta
 from itertools import chain
 from operator import attrgetter
 
-from grammar import event_format, line_format
+from grammar import event_format, file_format
 from events import Event
 from recurrance import RecurringEvents
 
@@ -19,15 +19,15 @@ class DataBase:
         self.path = Path(calendar_path).expanduser()
         self.events=[]
         self.recurrances=[]
-        with open(self.path, 'r') as file:
-            for line in sorted(file):
-                match line_format.parse(line):
-                    case e if isinstance(e,Event):
-                        self.events.append(e)
-                    case r if isinstance(r, RecurringEvents):
-                        self.recurrances.append(e)
-                    case _ :
-                        raise ValueError("unknown object type in file")
+        items = file_format.parse(self.path.read_text())
+        for item in items:
+            if isinstance(item,Event):
+                self.events.append(item)
+            elif isinstance(item, RecurringEvents):
+                self.recurrances.append(item)
+            else:
+                raise ValueError("unknown object type in file")
+        self.events.sort(key=lambda x: x.date)
 
     def add(self, event: Event):
         with open(self.path, 'a') as cal_file:

@@ -47,3 +47,5 @@ recurrance_format = seq(
 ).combine_dict(recurrance.RecurringEvents)
 
 line_format = event_format | recurrance_format
+
+file_format = (line_format<<string('\n').optional()).many()
