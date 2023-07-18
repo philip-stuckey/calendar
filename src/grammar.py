@@ -19,7 +19,7 @@ time_fmt=seq(
 ).combine_dict(datetime.time)
 
 timesep = string(' ')
-fieldsep = string('\t')
+fieldsep = string('\t').at_least(1)
 
 import events
 description=regex('[^\n]').many().concat().map(str.strip)
