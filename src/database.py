@@ -41,7 +41,7 @@ class DataBase:
                     self.events, 
                     *(rec.list(end) for rec in self.recurrances)
                 )
-            ) 
+            )
     
     def list_dates(self,start,end):
         return map(attrgetter('date'), self.list(start, end))
