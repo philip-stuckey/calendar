@@ -80,12 +80,12 @@ class App:
         start = _date.today() if start is None else _date.fromisoformat(start)
         end = start + timedelta(days=7) if end is None else _date.fromisoformat(end)
         for date in daterange(start, end):
-            header_fmt = f'%Y-%m-%d %a {"(today)" if date == _date.today() else ""}'
+            header_fmt = f'%m-%d %a {"(today)" if date == _date.today() else ""}'
             print(date.strftime(header_fmt))
             for event in self._database.day(date):
                 print(
-                    ' '*5,
-                    event.time.strftime('%H:%M') if event.time is not None else ' '*5,
+                        '',
+                    event.time.strftime('%H:%M') if event.time is not None else '-'*5,
                     event.description
                 )
 
