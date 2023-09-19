@@ -5,7 +5,7 @@ from dataclasses import dataclass
 
 class Period(ABC):
     @abstractmethod
-    def next(self, date):
+    def iter(self, start, end):
         pass
 
 @dataclass
@@ -22,31 +22,37 @@ class RecurringEvents:
     def list(self, end: date):
         start = self.start_date
         end = min(end, self.end_date)
-        while start <= end:
+        for date in self.period.iter(start,end):
             yield self._new_event(start)
-            start = self.period.next(start)
 
 @dataclass
 class DayPeriod(Period):
     days: int
-    def next(self, date):
-        return date + timedelta(days=self.days)
+    def _timedelta(self):
+        return timedelta(days=self.days)
+
+    def iter(self, start, end):
+        date=start
+        while (date - self._timedelta()) < end:
+            yield date 
+            date += self._timedelta()
 
 @dataclass
 class MonthPeriod(Period):
     months: int
-    def next(self, date):
-        m = date.month + self.months
-        return date.replace(year=date.year + (m//12), month=m%12)
+    
+    def iter(self, start, end):
+        date = start
+        while date.year <= end.year and (date.month < end.month or (date.day < end.day and date.month == end.month)): 
+            yield date 
+            m = date.month + self.months
+            date = date.replace(year=date.year + (m//12), month=m%12)
 
 @dataclass
 class EndOfMonth(Period):
-    def next(self, date):
-        (_, eom) = calendar.monthrange(date.year, date.month)
-        if date.day == eom:
-            date = date.replace(day=1)
-            date = MonthPeriod(1).next(date)
-            (_, eom) = calendar.monthrange(date.year, month)
-
-        return date.replace(day=eom)
+    def iter(self, start, end):
+        for year in range(start.year,end.year):
+            for month in range(1,13):
+                (_, eom) = calendar.monthrange(year, month)
+                yield date(year, month, eom)
 

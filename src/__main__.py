@@ -1,7 +1,7 @@
 from grammar import line_format, date_fmt, time_fmt
 from calendar_grids import MonthGrid, YearGrid
 from events import Event
-
+from itertools import islice
 from operator import attrgetter
 
 import calendar
@@ -89,6 +89,9 @@ class App:
                     event.description
                 )
 
+    def next(self, n: int):
+        for event in sorted(islice(self._database.list(),n),key=lambda e:e.date): 
+            print("{:>3d} days".format((event.date - _date.today()).days), event.description)
 
     def list(self, start, end):
         '''
