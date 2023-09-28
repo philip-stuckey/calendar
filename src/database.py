@@ -59,11 +59,6 @@ class DataBase:
         start_of_month = date(year, month, 1)
         end_of_month = date(year, month, days_in_month)
         return self.list(start_of_month, end_of_month)
-
-    def weekof(self, date):
-        start_of_week, end_of_week  = weekof(date)
-        return self.list(start_of_week, end_of_week)
-    
+   
     def day(self, date):
-        return self.list(start=date, end=date)
-
+        return self.list(date, date+timedelta(days=1))

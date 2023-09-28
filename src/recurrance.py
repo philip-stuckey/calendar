@@ -33,7 +33,7 @@ class RecurringEvents:
         start = self.start_date
         end = min(end, self.end_date)
         for date in self.period.iter(start,end):
-            yield self._new_event(start)
+            yield self._new_event(date)
 
 @dataclass
 class DayPeriod(Period):
