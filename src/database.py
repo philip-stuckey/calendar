@@ -44,7 +44,7 @@ class DataBase:
         yield from self._singular_events()
         yield from self._recurring_events(end)
 
-    def list(self, start, end):
+    def list(self, start=date.today(), end=date.max):
         occuresin = lambda e: e.date >= start and e.date < end
         all_events = list(self._all_events(end))
         filtered = [e for e in all_events if occuresin(e)] 
