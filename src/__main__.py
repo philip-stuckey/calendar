@@ -52,7 +52,7 @@ class App:
         (sow, eow) = weekof(today)
 
         print(f"{sow.isoformat()}/{eow.isoformat()}".center(21))
-        for event in self._database.weekof(today):
+        for event in self._database.list(sow, eow):
             print(
                 calendar.day_name[event.date.weekday()][:w].ljust(w), 
                 event.time.strftime('%H:%M') if event.time is not None else ' '*5,
@@ -92,6 +92,12 @@ class App:
     def next(self, n: int):
         for event in sorted(islice(self._database.list(),n),key=lambda e:e.date): 
             print("{:>3d} days".format((event.date - _date.today()).days), event.description)
+    
+    def recurring(self):
+        for rec in self._database.recurrances:
+            if rec.end_date > _date.today():
+                print(rec)
+
 
     def list(self, start, end):
         '''

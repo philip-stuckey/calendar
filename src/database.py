@@ -33,18 +33,23 @@ class DataBase:
         with open(self.path, 'a') as cal_file:
             print(event, file=cal_file)
 
-    def list(self, start: date = date.today(), end: date = date.max):
-        occuresin = lambda event: event.date >= start and event.date <=end
-        return filter(
-                occuresin, 
-                chain(
-                    self.events, 
-                    *(rec.list(end) for rec in self.recurrances)
-                )
-            )
+    def _singular_events(self):
+        yield from self.events
+
+    def _recurring_events(self, end: date):
+        for recurrance in self.recurrances:
+            yield from recurrance.list(end)
     
-    def list_dates(self,start,end):
-        return map(attrgetter('date'), self.list(start, end))
+    def _all_events(self, end: date):
+        yield from self._singular_events()
+        yield from self._recurring_events(end)
+
+    def list(self, start, end):
+        occuresin = lambda e: e.date >= start and e.date < end
+        all_events = list(self._all_events(end))
+        filtered = [e for e in all_events if occuresin(e)] 
+        ordered = sorted(filtered, key=lambda e: e.date)
+        return ordered                        
 
     def year(self, year: int):
         return self.list(date(year,1,1), date(year, 12, 31))
